@@ -1,7 +1,7 @@
 package br.com.bookinghub.api.service;
 
 import br.com.bookinghub.api.dto.HousingDTO;
-import br.com.bookinghub.api.model.Housing;
+import br.com.bookinghub.api.model.Room;
 import br.com.bookinghub.api.model.exception.ResourceNotFoundException;
 import br.com.bookinghub.api.repository.HousingRepository;
 import br.com.bookinghub.api.repository.BookingRepository;
@@ -29,7 +29,7 @@ public class HousingService {
      */
     @Transactional(readOnly = true)
     public List<HousingDTO> findAllHousings() {
-        List<Housing> list = repository.findAll();
+        List<Room> list = repository.findAll();
         return list.stream().map(housing -> new ModelMapper().map(housing,HousingDTO.class)).collect(Collectors.toList());
     }
 
@@ -41,7 +41,7 @@ public class HousingService {
     @Transactional(readOnly = true)
     public Optional<HousingDTO> findHousingById(Long id) {
         // Obtaining Housing Optional by its ID.
-        Optional<Housing> housing = repository.findById(id);
+        Optional<Room> housing = repository.findById(id);
         // If it couldn't find, throw an Exception
         if (housing.isEmpty()) {
             throw new ResourceNotFoundException("Housing ID " + id + " could not be found.");
@@ -59,9 +59,9 @@ public class HousingService {
      * @return the added housing
      */
     public HousingDTO addHousing (HousingDTO housingDto) {
-        Housing housing = new ModelMapper().map(housingDto, Housing.class);
-        repository.save(housing);
-        return new HousingDTO(housing);
+        Room room = new ModelMapper().map(housingDto, Room.class);
+        repository.save(room);
+        return new HousingDTO(room);
     }
 
     /**
@@ -91,8 +91,8 @@ public class HousingService {
          * copy HousingDTO information received on the request.
          */
         housingDto.setId(id);
-        Housing housing = new ModelMapper().map(housingDto, Housing.class);
-        housing = repository.save(housing);
-        return new HousingDTO(housing);
+        Room room = new ModelMapper().map(housingDto, Room.class);
+        room = repository.save(room);
+        return new HousingDTO(room);
     }
 }

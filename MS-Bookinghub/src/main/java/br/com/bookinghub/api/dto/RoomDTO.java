@@ -1,6 +1,6 @@
 package br.com.bookinghub.api.dto;
 
-import br.com.bookinghub.api.model.Housing;
+import br.com.bookinghub.api.model.Room;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -45,16 +45,16 @@ public class HousingDTO implements Serializable {
         this.bookings = bookings;
     }
 
-    public HousingDTO(Housing housing) {
-        id = housing.getId();
-        name = housing.getName();
-        title = housing.getTitle();
-        description = housing.getDescription();
-        rating = housing.getRating();
-        dailyCost = housing.getDailyCost();
-        address = housing.getAddress();
-        capacity = housing.getCapacity();
-        housing.getBookings().forEach(booking -> this.bookings.add(new BookingDTO (booking)));
+    public HousingDTO(Room room) {
+        id = room.getId();
+        name = room.getName();
+        title = room.getTitle();
+        description = room.getDescription();
+        rating = room.getRating();
+        dailyCost = room.getDailyCost();
+        address = room.getAddress();
+        capacity = room.getCapacity();
+        room.getBookings().forEach(booking -> this.bookings.add(new BookingDTO (booking)));
     }
 
     public Long getId() {
