@@ -2,7 +2,7 @@
 
     import br.com.bookinghub.api.model.Booking;
     import br.com.bookinghub.api.model.Client;
-    import br.com.bookinghub.api.model.Housing;
+    import br.com.bookinghub.api.model.Room;
 
     import java.io.Serializable;
     import java.time.LocalDate;
@@ -15,7 +15,7 @@
 
         private String status;
 
-        private Housing housing;
+        private Room room;
 
         private LocalDate checkIn;
 
@@ -41,12 +41,12 @@
             this.status = status;
         }
 
-        public Housing getHousing() {
-            return housing;
+        public Room getHousing() {
+            return room;
         }
 
-        public void setHousing(Housing housing) {
-            this.housing = housing;
+        public void setHousing(Room room) {
+            this.room = room;
         }
 
         public LocalDate getCheckIn() {
@@ -84,10 +84,10 @@
         public BookingDTO() {
         }
 
-        public BookingDTO(Long id, String status, Housing housing, LocalDate checkIn, LocalDate checkOut, int numberOfGuests, Client client) {
+        public BookingDTO(Long id, String status, Room room, LocalDate checkIn, LocalDate checkOut, int numberOfGuests, Client client) {
             this.id = id;
             this.status = status;
-            this.housing = housing;
+            this.room = room;
             this.checkIn = checkIn;
             this.checkOut = checkOut;
             this.numberOfGuests = numberOfGuests;
@@ -96,8 +96,8 @@
 
         public BookingDTO(Booking booking) {
             id = booking.getId();
-            status = booking.getStatus();
-            housing = booking.getHousing();
+//            status = booking.getStatus();
+            room = booking.getRoom();
             checkIn = booking.getCheckIn();
             checkOut = booking.getCheckOut();
             numberOfGuests = booking.getNumberOfGuests();

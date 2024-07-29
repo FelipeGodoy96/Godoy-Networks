@@ -1,6 +1,7 @@
 package br.com.bookinghub.api.controller;
 
 
+import br.com.bookinghub.api.model.Client;
 import br.com.bookinghub.api.service.ClientService;
 import br.com.bookinghub.api.dto.ClientDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -48,4 +50,17 @@ public class ClientController {
         userDto = service.updateClient(id, userDto);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
+
+    @GetMapping("/exists")
+    public ResponseEntity<Boolean> existsByEmail(@RequestParam String email) {
+        boolean exists = service.existsByEmail(email);
+        return new ResponseEntity<>(exists, HttpStatus.OK);
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<Optional<ClientDTO>> findUserByEmail(@RequestParam String email) {
+        Optional<ClientDTO> client = service.getClientByEmail(email);
+        return new ResponseEntity<>(client, HttpStatus.OK);
+    }
+
 }

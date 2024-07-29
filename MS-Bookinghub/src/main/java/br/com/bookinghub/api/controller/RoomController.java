@@ -1,8 +1,8 @@
 package br.com.bookinghub.api.controller;
 
 
-import br.com.bookinghub.api.dto.HousingDTO;
-import br.com.bookinghub.api.service.HousingService;
+import br.com.bookinghub.api.dto.RoomDTO;
+import br.com.bookinghub.api.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,40 +13,40 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/housing")
-public class HousingController {
+@RequestMapping("/rooms")
+public class RoomController {
 
     @Autowired
-    private HousingService service;
+    private RoomService service;
 
     @GetMapping
-    public ResponseEntity<List<HousingDTO>> getAllHousings() {
-        List<HousingDTO> housings = service.findAllHousings();
-        return new ResponseEntity<>(housings, HttpStatus.OK);
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+        List<RoomDTO> rooms = service.findAllRooms();
+        return new ResponseEntity<>(rooms, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<HousingDTO>> getHousingById (Long id) {
-        Optional<HousingDTO> housingDto = service.findHousingById(id);
-        return new ResponseEntity<>(housingDto, HttpStatus.OK);
+    public ResponseEntity<Optional<RoomDTO>> getRoomById (Long id) {
+        Optional<RoomDTO> roomDto = service.findRoomById(id);
+        return new ResponseEntity<>(roomDto, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<HousingDTO> createHousing (@RequestBody HousingDTO housingDto) {
-        housingDto = service.addHousing(housingDto);
-        return new ResponseEntity<>(housingDto, HttpStatus.CREATED);
+    public ResponseEntity<RoomDTO> createRoom (@RequestBody RoomDTO roomDto) {
+        roomDto = service.addRoom(roomDto);
+        return new ResponseEntity<>(roomDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> destroyHousing (@PathVariable Long id) {
-        service.removeHousing(id);
+    public ResponseEntity<?> destroyRoom (@PathVariable Long id) {
+        service.removeRoom(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HousingDTO> refreshHousing (@PathVariable Long id, @RequestBody HousingDTO housingDto) {
-        housingDto = service.updateHousing(id, housingDto);
-        return new ResponseEntity<>(housingDto, HttpStatus.OK);
+    public ResponseEntity<RoomDTO> refreshRoom (@PathVariable Long id, @RequestBody RoomDTO roomDto) {
+        roomDto = service.updateRoom(id, roomDto);
+        return new ResponseEntity<>(roomDto, HttpStatus.OK);
     }
 
 

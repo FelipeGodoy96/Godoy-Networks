@@ -19,5 +19,11 @@ public class RegisterRequestValidator implements Validator {
         if (request.getFirstName() != null && request.getFirstName().contains(" ")) {
             errors.rejectValue("firstName", "fistname.nospaces", "First name cannot contain spaces");
         }
+
+        if (request.getEmail() != null && request.getEmail().contains(" ")) {
+            errors.rejectValue("email", "email.nospaces", "Email cannot contain spaces" );
+        }
+
+
     }
 }

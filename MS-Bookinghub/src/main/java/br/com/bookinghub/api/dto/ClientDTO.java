@@ -7,7 +7,7 @@ import br.com.bookinghub.api.model.Role;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class RegisterRequest implements Serializable {
+public class ClientDTO implements Serializable {
 
     private static final Long serialVersionUID = 1L;
 
@@ -21,6 +21,8 @@ public class RegisterRequest implements Serializable {
 
     private Role role;
 
+    private LocalDate birthdate;
+
     public Role getRole() {
         return role;
     }
@@ -29,6 +31,13 @@ public class RegisterRequest implements Serializable {
         this.role = role;
     }
 
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -63,22 +72,25 @@ public class RegisterRequest implements Serializable {
     }
 
 
-    public RegisterRequest() {
+    public ClientDTO() {
     }
 
-    public RegisterRequest(Long id, String firstName, String lastName, String email, String password, LocalDate birthdate, Role role) {
+    public ClientDTO(Long id, String firstName, String lastName, String email, String password, LocalDate birthdate, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.birthdate = birthdate;
     }
 
-    public RegisterRequest(Client client){
+    public ClientDTO(Client client){
+
         firstName = client.getFirstName();
         lastName = client.getLastName();
         email = client.getEmail();
         password = client.getPassword();
         role = client.getRole();
+        birthdate = client.getBirthdate();
     }
 }

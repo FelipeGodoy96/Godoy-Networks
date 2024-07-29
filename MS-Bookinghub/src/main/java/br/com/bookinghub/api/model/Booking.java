@@ -14,11 +14,12 @@ public class Booking implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
 
     @OneToOne
-//    @JoinColumn(name = "housing_id")
-    private Housing housing;
+//    @JoinColumn(name = "room_id")
+    private Room room;
 
     private LocalDate checkIn;
 
@@ -38,20 +39,20 @@ public class Booking implements Serializable {
         this.id = id;
     }
 
-    public String getStatus() {
+    public BookingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 
-    public Housing getHousing() {
-        return housing;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setHousing(Housing housing) {
-        this.housing = housing;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public LocalDate getCheckIn() {
@@ -84,6 +85,19 @@ public class Booking implements Serializable {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Booking(Long id, BookingStatus status, Room room, LocalDate checkIn, LocalDate checkOut, int numberOfGuests, Client client) {
+        this.id = id;
+        this.status = status;
+        this.room = room;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.numberOfGuests = numberOfGuests;
+        this.client = client;
+    }
+
+    public Booking() {
     }
 
     @Override

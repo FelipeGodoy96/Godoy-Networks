@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class Housing implements Serializable {
+public class Room implements Serializable {
 
     private static final Long serialVersionUID = 1L;
 
@@ -25,7 +25,7 @@ public class Housing implements Serializable {
     private String description;
     private Double rating;
 
-    private Double dailyCost;
+    private Double monthlyFee;
 
     private String address;
 
@@ -43,16 +43,16 @@ public class Housing implements Serializable {
     //private Facility facilities = new HashSet<>();
 
 
-    public Housing() {
+    public Room() {
     }
 
-    public Housing(Long id, String name, String title, String description, Double rating, Double dailyCost, String address, int capacity, Set<Booking> bookings, Category category) {
+    public Room(Long id, String name, String title, String description, Double rating, Double monthlyFee, String address, int capacity, Set<Booking> bookings, Category category) {
         this.id = id;
         this.name = name;
         this.title = title;
         this.description = description;
         this.rating = rating;
-        this.dailyCost = dailyCost;
+        this.monthlyFee = monthlyFee;
         this.address = address;
         this.capacity = capacity;
         this.bookings = bookings;
@@ -99,12 +99,12 @@ public class Housing implements Serializable {
         this.rating = rating;
     }
 
-    public Double getDailyCost() {
-        return dailyCost;
+    public Double getMonthlyFee() {
+        return monthlyFee;
     }
 
-    public void setDailyCost(Double dailyCost) {
-        this.dailyCost = dailyCost;
+    public void setMonthlyFee(Double monthlyFee) {
+        this.monthlyFee = monthlyFee;
     }
 
     public String getAddress() {
@@ -139,12 +139,14 @@ public class Housing implements Serializable {
         this.category = category;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Housing housing = (Housing) o;
-        return Objects.equals(id, housing.id);
+        Room room = (Room) o;
+        return Objects.equals(id, room.id);
     }
 
     @Override

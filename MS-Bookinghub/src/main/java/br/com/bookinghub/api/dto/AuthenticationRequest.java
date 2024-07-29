@@ -1,6 +1,6 @@
 package br.com.bookinghub.api.dto;
 
-public class LoginDTO {
+public class AuthenticationRequest {
 
     private String email;
     private String password;
@@ -21,10 +21,10 @@ public class LoginDTO {
         this.password = password;
     }
 
-    public LoginDTO() {
+    public AuthenticationRequest() {
     }
 
-    public LoginDTO(String email, String password) {
+    public AuthenticationRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }

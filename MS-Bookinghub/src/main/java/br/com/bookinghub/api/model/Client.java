@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 
 @Entity
@@ -18,9 +16,9 @@ public class Client implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String fullname;
+    private String firstName;
 
-    private String nickname;
+    private String lastName;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -29,10 +27,12 @@ public class Client implements Serializable {
 
     private LocalDate birthdate;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinTable(name = "client_roles", joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> roles = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+//    @JoinTable(name = "client_roles", joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+//    private Set<Role> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public Long getId() {
         return id;
@@ -42,20 +42,20 @@ public class Client implements Serializable {
         this.id = id;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -82,25 +82,25 @@ public class Client implements Serializable {
         this.birthdate = birthdate;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Client() {
     }
 
-    public Client(Long id, String fullname, String nickname, String email, String password, LocalDate birthdate, Set<Role> roles) {
+    public Client(Long id, String firstName, String lastName, String email, String password, LocalDate birthdate, Role role) {
         this.id = id;
-        this.fullname = fullname;
-        this.nickname = nickname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.birthdate = birthdate;
-        this.roles = roles;
+        this.role = role;
     }
 
     @Override

@@ -21,8 +21,9 @@ public class RestExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> handleDataIntegrityViolationException (DataIntegrityViolationException exception) {
         String message = exception.getMostSpecificCause().toString().substring(exception.getMostSpecificCause().toString().indexOf("Detail"));
-        ErrorMessage error = new ErrorMessage("An error occurred while processing you request.", HttpStatus.OK.value(), message);
-        return new ResponseEntity<>(error, HttpStatus.OK);
+        ErrorMessage error = new ErrorMessage("An error occurred while processing you request.", HttpStatus.INTERNAL_SERVER_ERROR.value(), message);
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
 }

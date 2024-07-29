@@ -1,26 +1,21 @@
 package br.com.bookinghub.api.service;
-import br.com.bookinghub.api.model.Role;
 import br.com.bookinghub.api.dto.ClientDTO;
 import br.com.bookinghub.api.model.Client;
+import br.com.bookinghub.api.model.Role;
 import br.com.bookinghub.api.model.exception.ResourceNotFoundException;
 import br.com.bookinghub.api.repository.ClientRepository;
-import br.com.bookinghub.api.repository.RoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     private ClientRepository repository;
@@ -60,16 +55,16 @@ public class ClientService {
 
     /**
      * Method that adds a client to the database
-     * @param clientDto to be added
+     * @param request to be added
      * @return the added client
      */
-    public ClientDTO addClient (ClientDTO clientDto) {
-        Client client = new ModelMapper().map(clientDto, Client.class);
+    public ClientDTO addClient (ClientDTO request) {
+        Client client = new ModelMapper().map(request, Client.class);
         // Re-setting password to a encoded one
-        client.setPassword(passwordEncoder.encode(clientDto.getPassword()));
-        Optional<Role> defaultRole = roleRepository.findByRole("USER");
-        client.setRoles(Collections.singleton(defaultRole.get()));
-        repository.save(client);
+        client.setPassword(passwordEncoder.encode(request.getPassword()));
+//        client.setBirthdate(LocalDate.now());
+        client.setRole(Role.USER);
+        client = repository.save(client);
         return new ClientDTO(client);
     }
 
@@ -87,10 +82,10 @@ public class ClientService {
     /**
      * Method that updates a client on the database
      * @param id of the client to be updated
-     * @param clientDto to be updated
+     * @param request to be updated
      * @return client after being updated on the database
      */
-    public ClientDTO updateClient (Long id, ClientDTO clientDto) {
+    public ClientDTO updateClient (Long id, ClientDTO request) {
         if (findClientById(id).isEmpty()) {
             throw new ResourceNotFoundException("Client ID " + id + " not found");
         }
@@ -99,9 +94,22 @@ public class ClientService {
          * which receives a ModelMapper and calls map method to
          * copy ClientDTO information received on the request.
          */
-        clientDto.setId(id);
-        Client client = new ModelMapper().map(clientDto, Client.class);
+//        request.setId(id);
+        Client client = new ModelMapper().map(request, Client.class);
         client = repository.save(client);
         return new ClientDTO(client);
+    }
+
+    public boolean existsByEmail (String email) {
+        return repository.existsByEmail(email);
+    }
+
+    public Optional<ClientDTO> getClientByEmail (String email) {
+        Optional<Client> user = repository.findByEmail(email);
+        if (user.isEmpty()) {
+        throw new ResourceNotFoundException("User email: " + email + " could not be found.");
+    }
+    ClientDTO dto = new ModelMapper().map(user.get(), ClientDTO.class);
+        return Optional.of(dto);
     }
 }

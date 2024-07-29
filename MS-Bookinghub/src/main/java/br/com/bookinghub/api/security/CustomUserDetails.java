@@ -1,5 +1,6 @@
 package br.com.bookinghub.api.security;
 
+import br.com.bookinghub.api.model.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,19 +10,24 @@ public class CustomUserDetails implements UserDetails {
 
     private String username;
     private String password;
-    private Collection<? extends GrantedAuthority> authorities;
-    private String fullname;
+    private Role role;
+    private String firstName;
 
-    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, String fullname) {
+    public CustomUserDetails(String username, String password, Role role, String firstName) {
         this.username = username;
         this.password = password;
-        this.authorities = authorities;
-        this.fullname = fullname;
+        this.role = role;
+        this.firstName = firstName;
+    }
+
+//    @Override
+    public Role getRole() {
+        return role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return null;
     }
 
     @Override
@@ -55,7 +61,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
 
-    public String getFullname() {
-        return fullname;
+    public String getFirstName() {
+        return firstName;
     }
 }

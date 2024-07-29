@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HousingDTO implements Serializable {
+public class RoomDTO implements Serializable {
 
     private static final Long serialVersionUID = 1L;
 
@@ -29,11 +29,11 @@ public class HousingDTO implements Serializable {
     private Set<BookingDTO> bookings = new HashSet<>();
 
 
-    public HousingDTO() {
+    public RoomDTO() {
     }
 
 
-    public HousingDTO(Long id, String name, String title, String description, Double rating, Double dailyCost, String address, int capacity, Set<BookingDTO> bookings) {
+    public RoomDTO(Long id, String name, String title, String description, Double rating, Double dailyCost, String address, int capacity, Set<BookingDTO> bookings) {
         this.id = id;
         this.name = name;
         this.title = title;
@@ -45,13 +45,13 @@ public class HousingDTO implements Serializable {
         this.bookings = bookings;
     }
 
-    public HousingDTO(Room room) {
+    public RoomDTO(Room room) {
         id = room.getId();
         name = room.getName();
         title = room.getTitle();
         description = room.getDescription();
         rating = room.getRating();
-        dailyCost = room.getDailyCost();
+        dailyCost = room.getMonthlyFee();
         address = room.getAddress();
         capacity = room.getCapacity();
         room.getBookings().forEach(booking -> this.bookings.add(new BookingDTO (booking)));

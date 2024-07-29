@@ -1,9 +1,9 @@
 package br.com.bookinghub.api.service;
 
-import br.com.bookinghub.api.dto.HousingDTO;
+import br.com.bookinghub.api.dto.RoomDTO;
 import br.com.bookinghub.api.model.Room;
 import br.com.bookinghub.api.model.exception.ResourceNotFoundException;
-import br.com.bookinghub.api.repository.HousingRepository;
+import br.com.bookinghub.api.repository.RoomRepository;
 import br.com.bookinghub.api.repository.BookingRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,84 +15,84 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class HousingService {
+public class RoomService {
 
     @Autowired
-    private HousingRepository repository;
+    private RoomRepository repository;
 
     @Autowired
     private BookingRepository bookingRepository;
 
     /**
-     * Method to retrieve all housings.
-     * @return every housing from the database.
+     * Method to retrieve all rooms.
+     * @return every room from the database.
      */
     @Transactional(readOnly = true)
-    public List<HousingDTO> findAllHousings() {
+    public List<RoomDTO> findAllRooms() {
         List<Room> list = repository.findAll();
-        return list.stream().map(housing -> new ModelMapper().map(housing,HousingDTO.class)).collect(Collectors.toList());
+        return list.stream().map(room -> new ModelMapper().map(room, RoomDTO.class)).collect(Collectors.toList());
     }
 
     /**
-     * Method that return a housing by its ID.
-     * @param id of the searched housing.
-     * @return a housing.
+     * Method that return a room by its ID.
+     * @param id of the searched room.
+     * @return a room.
      */
     @Transactional(readOnly = true)
-    public Optional<HousingDTO> findHousingById(Long id) {
-        // Obtaining Housing Optional by its ID.
-        Optional<Room> housing = repository.findById(id);
+    public Optional<RoomDTO> findRoomById(Long id) {
+        // Obtaining Room Optional by its ID.
+        Optional<Room> room = repository.findById(id);
         // If it couldn't find, throw an Exception
-        if (housing.isEmpty()) {
-            throw new ResourceNotFoundException("Housing ID " + id + " could not be found.");
+        if (room.isEmpty()) {
+            throw new ResourceNotFoundException("Room ID " + id + " could not be found.");
         }
         // Convert the found Optional into a DTO.
-        HousingDTO dto = new ModelMapper().map(housing.get(), HousingDTO.class);
+        RoomDTO dto = new ModelMapper().map(room.get(), RoomDTO.class);
         // Creating and returning an Optional of DTO.
         return Optional.of(dto);
     }
 
 
     /**
-     * Method that adds a housing to the database
-     * @param housingDto to be added
-     * @return the added housing
+     * Method that adds a room to the database
+     * @param roomDto to be added
+     * @return the added room
      */
-    public HousingDTO addHousing (HousingDTO housingDto) {
-        Room room = new ModelMapper().map(housingDto, Room.class);
+    public RoomDTO addRoom (RoomDTO roomDto) {
+        Room room = new ModelMapper().map(roomDto, Room.class);
         repository.save(room);
-        return new HousingDTO(room);
+        return new RoomDTO(room);
     }
 
     /**
-     * Deletes a housing from the databases
-     * @param id from the housing to be deleted
+     * Deletes a room from the databases
+     * @param id from the room to be deleted
      */
-    public void removeHousing (Long id) {
-        if (findHousingById(id).isEmpty()) {
-            throw new ResourceNotFoundException("Housing ID " + id + " not found");
+    public void removeRoom (Long id) {
+        if (findRoomById(id).isEmpty()) {
+            throw new ResourceNotFoundException("Room ID " + id + " not found");
         }
         repository.deleteById(id);
     }
 
     /**
-     * Method that updates a housing on the database
-     * @param id of the housing to be updated
-     * @param housingDto to be updated
-     * @return housing after being updated on the database
+     * Method that updates a room on the database
+     * @param id of the room to be updated
+     * @param roomDto to be updated
+     * @return room after being updated on the database
      */
-    public HousingDTO updateHousing (Long id, HousingDTO housingDto) {
-        if (findHousingById(id).isEmpty()) {
-            throw new ResourceNotFoundException("Housing ID " + id + " not found");
+    public RoomDTO updateRoom (Long id, RoomDTO roomDto) {
+        if (findRoomById(id).isEmpty()) {
+            throw new ResourceNotFoundException("Room ID " + id + " not found");
         }
         /**
-         * Instantiating a variable of type Housing with name housing
+         * Instantiating a variable of type Room with name room
          * which receives a ModelMapper and calls map method to
-         * copy HousingDTO information received on the request.
+         * copy RoomDTO information received on the request.
          */
-        housingDto.setId(id);
-        Room room = new ModelMapper().map(housingDto, Room.class);
+        roomDto.setId(id);
+        Room room = new ModelMapper().map(roomDto, Room.class);
         room = repository.save(room);
-        return new HousingDTO(room);
+        return new RoomDTO(room);
     }
 }

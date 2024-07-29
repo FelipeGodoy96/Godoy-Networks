@@ -1,5 +1,6 @@
 package com.godoynetworks.Auth.service;
 
+import com.godoynetworks.Auth.DTO.AuthenticationRequest;
 import com.godoynetworks.Auth.DTO.AuthenticationResponse;
 import com.godoynetworks.Auth.DTO.RegisterRequest;
 import com.godoynetworks.Auth.exception.ValidationException;
@@ -12,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -29,28 +34,33 @@ public class AuthService {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private AuthenticationManager authManager;
+
+    public AuthenticationResponse authenticate (AuthenticationRequest request) {
+        Authentication authentication = authManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+        User userDetails = (User) authentication.getPrincipal();
+        String token = jwtService.generateToken(userDetails);
+        return AuthenticationResponse.builder().accessToken(token).build();
+    }
+
 
     public AuthenticationResponse register(RegisterRequest request) {
         validateRequest(request);
 
         if (feignUserRepository.existsByEmail(request.getEmail())) {
-            throw new ValidationException(List.of("Email already registered"));
+            throw new ValidationException(List.of("Email already registered"), 409);
         }
-
-      /**  RECEBO A REQUISIÇÃO DE REGISTRO NO CONTROLLER DAQUI
-                PASSO/CHAMO A REQUISIÇÃO PRO MICROSERVIÇO DE CRIAR CONTA
-                CASO A RESPOSTA SEJA OK CRIADO
-                FAÇO A GERAÇÃO DE UM TOKEN
-                E RETORNO A REQUISIÇÃO PRO CLIENTE PELO CONTROLLER
-
-       */
-
           RegisterRequest registeredUser = feignUserRepository.addClient(request);
           System.out.println(registeredUser);
           User user = new ModelMapper().map(registeredUser, User.class);
           String jwtToken = jwtService.generateToken(user);
-          return AuthenticationResponse.builder().accessToken(jwtToken).tokenType("Bearer ").build();
-
+          return AuthenticationResponse.builder().accessToken(jwtToken).build();
     }
 
     private void validateRequest(RegisterRequest request) {
@@ -63,7 +73,7 @@ public class AuthService {
             List<String> errors = result.getFieldErrors().stream()
                     .map(FieldError::getDefaultMessage)
                     .collect(Collectors.toList());
-            throw new ValidationException(errors);
+            throw new ValidationException(errors, 400);
         }
     }
 }

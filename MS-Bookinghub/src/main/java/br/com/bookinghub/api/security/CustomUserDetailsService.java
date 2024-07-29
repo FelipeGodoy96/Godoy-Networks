@@ -1,19 +1,12 @@
 package br.com.bookinghub.api.security;
 
 import br.com.bookinghub.api.model.Client;
-import br.com.bookinghub.api.model.Role;
 import br.com.bookinghub.api.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -23,11 +16,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Client client = repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email not found"));
-        return new CustomUserDetails(client.getEmail(), client.getPassword(), getAuthorities(client.getRoles()), client.getFullname());
+        Client client = repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new CustomUserDetails(client.getEmail(), client.getPassword(),
+                client.getRole(),
+                client.getFirstName());
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRole())).collect(Collectors.toList());
-    }
+//    private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
+//        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRole())).collect(Collectors.toList());
+//    }
 }

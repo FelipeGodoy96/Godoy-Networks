@@ -1,9 +1,8 @@
 package br.com.bookinghub.api.controller;
 
+import br.com.bookinghub.api.dto.AuthenticationRequest;
 import br.com.bookinghub.api.security.JWTGenerator;
-import br.com.bookinghub.api.dto.AuthResponseDTO;
-import br.com.bookinghub.api.dto.LoginDTO;
-import br.com.bookinghub.api.repository.RoleRepository;
+import br.com.bookinghub.api.dto.AuthenticationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +20,15 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private RoleRepository roleRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private JWTGenerator jwtGenerator;
 
-    @PostMapping("login")
-    public ResponseEntity<AuthResponseDTO> loginAuthentication (@RequestBody LoginDTO loginDto) {
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate (@RequestBody AuthenticationRequest loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getEmail(),
@@ -39,7 +37,7 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
-        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+        return new ResponseEntity<>(new AuthenticationResponse(token), HttpStatus.OK);
     }
 
 }

@@ -19,7 +19,7 @@ public class JWTGenerator {
     public String generateToken(Authentication authentication) {
         CustomUserDetails client = (CustomUserDetails) authentication.getPrincipal();
         String email = client.getUsername();
-        String fullname = client.getFullname();
+        String fullname = client.getFirstName();
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + 68000);
 

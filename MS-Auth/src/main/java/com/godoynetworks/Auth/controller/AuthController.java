@@ -1,5 +1,6 @@
 package com.godoynetworks.Auth.controller;
 
+import com.godoynetworks.Auth.DTO.AuthenticationRequest;
 import com.godoynetworks.Auth.DTO.AuthenticationResponse;
 import com.godoynetworks.Auth.DTO.RegisterRequest;
 import com.godoynetworks.Auth.service.AuthService;
@@ -20,5 +21,11 @@ public class AuthController {
     public ResponseEntity<AuthenticationResponse> register (@RequestBody RegisterRequest request) {
         AuthenticationResponse authReponse = authService.register(request);
         return new ResponseEntity<>(authReponse, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate (@RequestBody AuthenticationRequest request) {
+        AuthenticationResponse authResponse = authService.authenticate(request);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 }
