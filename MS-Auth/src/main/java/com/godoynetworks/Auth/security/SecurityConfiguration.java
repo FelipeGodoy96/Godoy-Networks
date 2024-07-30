@@ -1,5 +1,6 @@
 package com.godoynetworks.Auth.security;
 
+import com.godoynetworks.Auth.model.Role;
 import com.godoynetworks.Auth.repository.FeignUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,10 +12,12 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +25,9 @@ public class SecurityConfiguration {
 
     @Autowired
     private FeignUserRepository feignUserRepository;
+
+    @Autowired
+    private JwtAuthFilter jwtAuthFilter;
 
 
     @Bean
@@ -31,8 +37,14 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers("/auth/*")
                                 .permitAll()
+                                .requestMatchers("/admin/**").hasAnyRole(Role.ADMIN.name())
+                                .requestMatchers("/rooms/**").hasAnyRole(Role.ADMIN.name(), Role.OWNER.name())
+                                .requestMatchers("/clients/**").hasAnyRole(Role.USER.name())
                                 .anyRequest()
                                 .authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

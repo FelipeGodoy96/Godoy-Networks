@@ -5,6 +5,7 @@ import com.godoynetworks.Auth.exception.ValidationException;
 import com.godoynetworks.Auth.exception.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -43,6 +44,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadCredentialsException (BadCredentialsException exception) {
         ErrorResponse error = new ErrorResponse("Invalid credentials", HttpStatus.UNAUTHORIZED.value(), List.of(exception.getMessage()));
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    // Not working apparently, fix later
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException (AccessDeniedException exception) {
+        ErrorResponse error = new ErrorResponse("Access denied", HttpStatus.FORBIDDEN.value(), List.of(exception.getMessage()));
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
 //    @ExceptionHandler(Exception.class)

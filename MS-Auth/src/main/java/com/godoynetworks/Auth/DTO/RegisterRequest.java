@@ -15,6 +15,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 
+    /*
+    This class is a DTO class, identical to DTO in CrudAPI
+     */
+
 
     @NotBlank(message = "Name cannot be null or empty")
     @Size(min = 2, max = 20, message = "First name must be minimum 2 to maximum 20 characters")

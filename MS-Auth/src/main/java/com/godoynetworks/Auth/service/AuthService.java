@@ -57,7 +57,6 @@ public class AuthService {
             throw new ValidationException(List.of("Email already registered"), 409);
         }
           RegisterRequest registeredUser = feignUserRepository.addClient(request);
-          System.out.println(registeredUser);
           User user = new ModelMapper().map(registeredUser, User.class);
           String jwtToken = jwtService.generateToken(user);
           return AuthenticationResponse.builder().accessToken(jwtToken).build();
