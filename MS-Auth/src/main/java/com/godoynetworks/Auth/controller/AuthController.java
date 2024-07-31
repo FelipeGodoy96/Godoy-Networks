@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/authenticate")
 @CrossOrigin(origins = "*") //Mudar para IP da VPS em produção
 public class AuthController {
 
@@ -23,7 +23,7 @@ public class AuthController {
         return new ResponseEntity<>(authReponse, HttpStatus.CREATED);
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/perform")
     public ResponseEntity<AuthenticationResponse> authenticate (@RequestBody AuthenticationRequest request) {
         AuthenticationResponse authResponse = authService.authenticate(request);
         return new ResponseEntity<>(authResponse, HttpStatus.OK);

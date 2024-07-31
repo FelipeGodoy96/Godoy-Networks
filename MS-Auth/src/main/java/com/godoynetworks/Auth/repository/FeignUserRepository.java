@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "MS-SAFEROOMAPI")
+@FeignClient(name = "SAFEROOM")
 public interface FeignUserRepository {
 
     @GetMapping("/clients")
